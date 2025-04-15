@@ -1,0 +1,7 @@
+hellaswag
+piqa
+social_iqa
+arc_easy
+arc_challenge
+winogrande
+Sciqa
