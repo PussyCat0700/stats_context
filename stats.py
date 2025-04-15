@@ -27,6 +27,21 @@ def process_sciqa(ds):
     texts = [item['string'] for item in ds['question']]
     return texts
 
+def process_piqa(ds):
+    texts = ds['goal']
+    print(texts[0])
+    return [str(text) for text in texts]
+
+def process_social_i_qa(ds):
+    texts = ds['context']
+    print(texts[0])
+    return [str(text) for text in texts]
+
+def process_winogrande(ds):
+    texts = ds['sentence']
+    print(texts[0])
+    return [str(text) for text in texts]
+
 def calculate_stats(texts):
     token_lengths = [len(tokenizer.encode(text)) for text in texts]
     total_tokens = sum(token_lengths)
@@ -43,17 +58,21 @@ datasets = [
     ("HellaSwag", "Rowan/hellaswag", process_hellaswag),
     ("ARC-Challenge", "allenai/ai2_arc", process_arc, "ARC-Challenge"),
     ("ARC-Easy", "allenai/ai2_arc", process_arc, "ARC-Easy"),
-    ("SciQA", "orkg/SciQA", process_sciqa)
+    ("SciQA", "orkg/SciQA", process_sciqa),
+    ("PIQA", "ybisk/piqa", process_piqa),
+    ("SocialIQA", "allenai/social_i_qa", process_social_i_qa),
+    ("Winogrande", "allenai/winogrande", process_winogrande, 'winogrande_xs')
 ]
 
 results = {}
 
 for dataset_info in datasets:
     name = dataset_info[0]
-    print(f"Processing {name}...")
     curr_output_path = os.path.join(result_dir, name+'.txt')
     if os.path.exists(curr_output_path):
+        print(f"Skipped {name}...")
         continue
+    print(f"Processing {name}...")
     
     # Load dataset
     if len(dataset_info) == 3:
